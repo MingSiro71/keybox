@@ -1,0 +1,20 @@
+#!/bin/bash
+if [ $# -lt 1 ];then
+    echo "keybox: needs sub command: add or use."
+    exit 1
+fi
+op=$1
+sh=/bin/bash
+libdir=`dirname $(dirname $0)`/lib/
+#
+shift
+#
+if [ $op == add ];then
+    ${sh} ${libdir}addkey $@ 
+elif [ $op == use ];then
+    ${sh} ${libdir}usekey $@
+else
+    echo "keybox: needs sub command: add or use."        
+    exit 1
+fi
+exit 0
