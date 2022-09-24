@@ -1,0 +1,21 @@
+if [ $# -ne 0 ];then
+    echo "keybox: too many arguments to export."
+    exit 1
+fi
+dest=$(pwd)
+rootdir=$(dirname $(dirname $0))
+tmpdir=${rootdir}/tmp/
+cd ${rootdir}
+#
+if [ -d ${tmpdir}/keys ];then
+    rm -rf ${tmpdir}/keys
+fi
+cp -a keys ${tmpdir}/keys
+#
+cd ${tmpdir}
+zipname=keybox_keys.zip
+zip -r ${zipname} keys 1>/dev/null
+mv ${zipname} ${dest}
+rm -rf ${tmpdir}/keys ${tmpdir}/${zipname}
+
+echo "export ${dest}/${zipname}."

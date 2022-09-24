@@ -13,6 +13,8 @@ if [ $op == add ];then
     ${sh} ${libdir}addkey $@ 
 elif [ $op == use ];then
     ${sh} ${libdir}usekey $@
+elif [ $op == export ];then
+    ${sh} ${libdir}exportkeys $@
 else
     echo "keybox: needs sub command: add or use."        
     exit 1
