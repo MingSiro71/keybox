@@ -11,8 +11,8 @@ fi
 echo type encrypt pass:
 read -s pass
 key=$(cat ${keydir}${name} | openssl enc -d -des -k ${pass} 2>/dev/null)
-if [ -n "$key" ];then
-    echo $key
-else
+if [ $? -gt 0 ]; then
     echo "pass is incorrect."
+else
+    echo $key
 fi
