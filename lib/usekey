@@ -14,5 +14,11 @@ key=$(openssl enc -d -aes-256-cbc -md sha256 -k ${pass} -in ${keydir}${name} 2>/
 if [ $? -gt 0 ]; then
     echo "pass is incorrect."
 else
-    echo $key
+    echo $key | pbcopy 2> /dev/null
+    if [ $? -gt 0 ];then
+        echo $key | clip.exe 2> /dev/null
+    fi
+    if [ $? -gt 0 ];then
+        echo $key
+    fi
 fi
