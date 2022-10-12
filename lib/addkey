@@ -1,10 +1,6 @@
-if [ $# -ne 2 ];then
-    echo 'keybox: requires "key name" and "key string" to add.'
-    exit 1
-fi
 name=$1
 key=$2
-keydir=`dirname $(dirname $0)`/keys/
+keydir=`dirname $(dirname $0)`/keys
 echo type encrypt pass:
 read -s pass
-echo $key | openssl enc -e -aes-256-cbc -k ${pass} -md sha256 -out ${keydir}${name}
+echo $key | openssl enc -e -aes-256-cbc -k ${pass} -md sha256 -out ${keydir}/${name}

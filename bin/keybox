@@ -1,22 +1,63 @@
 #!/bin/bash
-if [ $# -lt 1 ];then
-    echo "keybox: needs sub command: add or use."
-    exit 1
-fi
-op=$1
 sh=/bin/bash
-libdir=`dirname $(dirname $0)`/lib/
+libdir=`dirname $(dirname $0)`/lib
+source ${libdir}/version
 #
+op="use"
+keyname=""
+case $1 in
+    help)
+        echo "keybox ${version}"
+        echo "Usage: keybox [ [add] KEYNAME | ls ]"
+        echo "Sub commands:"
+        echo "    add: register new key to keybox."
+        echo "    ls: show keys."
+        echo "    export: export keys as tar archive."
+        exit 0
+    ;;
+    add)
+        op="add"
+        keyname=$2
+        keystring=$3
+        shift
+        shift
+    ;;
+    ls)
+        op="ls"
+    ;;
+    export)
+        op="export"
+    ;;
+    *)
+        keyname=$1
+    ;;
+esac
 shift
-#
-if [ $op == add ];then
-    ${sh} ${libdir}addkey $@ 
-elif [ $op == use ];then
-    ${sh} ${libdir}usekey $@
-elif [ $op == export ];then
-    ${sh} ${libdir}exportkeys $@
-else
-    echo "keybox: needs sub command: add or use."        
+if [ $# -ne 0 ];then
+    echo "keybox: too many arguments."
     exit 1
 fi
+case $op in
+    ls)
+        ${sh} ${libdir}/list
+        exit 0;
+    ;;
+    export)
+        ${sh} ${libdir}/exportkeys
+        exit 0;
+    ;;
+esac
+if [ -z "$keyname" ];then
+    echo "keybox: needs key name." 1>&2
+    exit 1
+fi
+if [ $op == use ];then
+    ${sh} ${libdir}/usekey $keyname
+    exit 0
+fi
+if [ -z "$keystring" ];then
+    echo "keybox: needs key string to add." 1>&2
+    exit 1
+fi
+${sh} ${libdir}/addkey $keyname $keystring
 exit 0

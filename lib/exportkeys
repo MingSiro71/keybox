@@ -1,7 +1,3 @@
-if [ $# -ne 0 ];then
-    echo "keybox: too many arguments to export."
-    exit 1
-fi
 dest=$(pwd)
 rootdir=$(dirname $(dirname $0))
 tmpdir=${rootdir}/tmp/

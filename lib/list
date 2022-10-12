@@ -1,0 +1,2 @@
+keydir=`dirname $(dirname $0)`/keys
+ls $keydir

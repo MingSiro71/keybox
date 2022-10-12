@@ -1,16 +1,12 @@
-if [ $# -ne 1 ];then
-    echo 'keybox: requires "key name" to use.'
-    exit 1
-fi
 name=$1
-keydir=`dirname $(dirname $0)`/keys/
-if [ ! -f ${keydir}${name} ];then
+keydir=`dirname $(dirname $0)`/keys
+if [ ! -f "${keydir}/${name}" ];then
    echo "no key named ${name}."
    exit 1
 fi
 echo type encrypt pass:
 read -s pass
-key=$(openssl enc -d -aes-256-cbc -md sha256 -k ${pass} -in ${keydir}${name} 2>/dev/null)
+key=$(openssl enc -d -aes-256-cbc -md sha256 -k ${pass} -in ${keydir}/${name} 2>/dev/null)
 if [ $? -gt 0 ]; then
     echo "pass is incorrect."
 else
