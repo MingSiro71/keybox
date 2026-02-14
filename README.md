@@ -7,7 +7,6 @@ Bash 製の軽量 CLI 鍵管理ツール。OpenSSL AES-256-CBC で暗号化し�
 - Bash
 - OpenSSL
 - 標準 Unix ツール (`ls`, `cp`, `rm`, `zip`)
-- `scp` (リモート保存を使う場合)
 
 ### クリップボード連携 (任意)
 
@@ -67,18 +66,6 @@ keybox export
 keybox help
 ```
 
-## リモート保存 (任意)
-
-`~/.keyboxrc` を作成すると、`keybox add` 実行時に暗号化済みファイルを SCP でリモートホストに自動バックアップする。設定ファイルがなければこの機能はスキップされる。
-
-```
-remote_host=example.com
-remote_user=backup_user
-remote_dir=/backups/keybox
-```
-
-3 項目すべてが設定されている場合のみ動作する。SCP が失敗した場合は警告を表示するが、鍵の登録自体は成功する。
-
 ## ディレクトリ構成
 
 ```
@@ -102,6 +89,20 @@ keys/            暗号化された鍵ファイルの格納先 (Git 管理外)
 | 保存形式 | OpenSSL 暗号化バイナリ |
 
 鍵ファイルごとに個別のパスワードを設定できる。パスワードはどこにも保存されない。
+
+## 実験的機能
+
+### リモート保存
+
+`~/.keyboxrc` を作成すると、`keybox add` 実行時に暗号化済みファイルを SCP でリモートホストに自動バックアップする。設定ファイルがなければこの機能はスキップされる。
+
+```
+remote_host=example.com
+remote_user=backup_user
+remote_dir=/backups/keybox
+```
+
+3 項目すべてが設定されている場合のみ動作する。SCP が失敗した場合は警告を表示するが、鍵の登録自体は成功する。
 
 ## ライセンス
 
