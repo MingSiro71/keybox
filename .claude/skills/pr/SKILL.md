@@ -16,7 +16,7 @@ allowed-tools:
 
 ## 手順
 
-1. `git log` と `git diff` でベースブランチ（デフォルト: `develop`、引数で変更可: `$ARGUMENTS`）からの変更内容を把握する
+1. `git log` と `git diff` でベースブランチ（デフォルト: `master`、引数で変更可: `$ARGUMENTS`）からの変更内容を把握する
 2. 変更内容を分析して、タイトルと本文を生成する
 3. 会話上に出力する
 
