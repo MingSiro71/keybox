@@ -13,17 +13,30 @@ Keybox は Bash 製の軽量 CLI 鍵管理ツール。OpenSSL AES-256-CBC で暗
 
 ### ブランチ命名規則
 
-開発指示の内容に応じて以下の接頭辞を付けてブランチを作成する:
-
-| 接頭辞 | 用途 | 例 |
-|---|---|---|
-| `feature/` | 機能開発 | `feature/import-keys` |
-| `fix/` | バグフィックス | `fix/decryption-error-handling` |
-| `dev/` | 開発体制・ツール・テスト | `dev/add-shellcheck` |
-| `ci-cd/` | デプロイ・CI/CD | `ci-cd/github-actions` |
-| `infra/` | ホスティング・インフラ | `infra/docker-setup` |
-
+この環境では `claude/` 接頭辞とセッションID末尾が push の必須条件となる。
 ブランチ名は英語の kebab-case で、指示内容を簡潔に表す名前にする。
+
+**作業ブランチ（リモートに push する）:**
+
+```
+claude/{種別}/{説明}-{session}
+```
+
+| 種別 | 用途 | 例 |
+|---|---|---|
+| `feature` | 機能開発 | `claude/feature/import-keys-{session}` |
+| `fix` | バグフィックス | `claude/fix/decryption-error-handling-{session}` |
+| `dev` | 開発体制・ツール・テスト | `claude/dev/add-shellcheck-{session}` |
+| `ci-cd` | デプロイ・CI/CD | `claude/ci-cd/github-actions-{session}` |
+| `infra` | ホスティング・インフラ | `claude/infra/docker-setup-{session}` |
+
+**プロトタイプブランチ（ローカル専用、push しない）:**
+
+```
+claude/{種別}/{説明}-proto-{n}
+```
+
+例: `claude/feature/import-keys-proto-1`, `claude/feature/import-keys-proto-2`
 
 ## 開発ワークフロー (プロトタイピング方式)
 
@@ -33,17 +46,17 @@ Keybox は Bash 製の軽量 CLI 鍵管理ツール。OpenSSL AES-256-CBC で暗
 
 ```
 develop から作業ブランチを切る
-例: feature/import-keys
+例: claude/feature/import-keys-{session}
 ```
 
 ### 2. 3つのプロトタイプを並行作成
 
 サブエージェントを **3つ** 起動し、それぞれ異なるアプローチでプロトタイプを実装する。
 
-- 各プロトタイプは作業ブランチ名の末尾にサフィックスを付けたブランチで作業する
-  - `feature/import-keys-proto-1`
-  - `feature/import-keys-proto-2`
-  - `feature/import-keys-proto-3`
+- 各プロトタイプはローカル専用ブランチで作業する（push しない）
+  - `claude/feature/import-keys-proto-1`
+  - `claude/feature/import-keys-proto-2`
+  - `claude/feature/import-keys-proto-3`
 - 各サブエージェントは独立してコードを書き、プロトタイプブランチにコミットする
 - サブエージェントには以下を指示する:
   - 実装の方針・設計判断の要約をコミットメッセージまたは出力に含めること
