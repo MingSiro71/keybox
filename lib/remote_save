@@ -1,0 +1,42 @@
+# remote_save - SCP encrypted key file to remote host
+# Usage: remote_save <filepath>
+# Reads ~/.keyboxrc for remote_host, remote_user, remote_dir
+# Silently skips if config is missing; warns on SCP failure
+# TODO: リモート保存失敗時の処理を将来アップデート予定
+
+filepath=$1
+
+if [ -z "$filepath" ]; then
+    exit 0
+fi
+
+rc_file=~/.keyboxrc
+
+if [ ! -f "$rc_file" ]; then
+    exit 0
+fi
+
+remote_host=""
+remote_user=""
+remote_dir=""
+
+while IFS='=' read -r key value; do
+    key=$(echo "$key" | tr -d '[:space:]')
+    value=$(echo "$value" | tr -d '[:space:]')
+    case "$key" in
+        ""|\#*) continue ;;
+    esac
+    case $key in
+        remote_host) remote_host=$value ;;
+        remote_user) remote_user=$value ;;
+        remote_dir)  remote_dir=$value ;;
+    esac
+done < "$rc_file"
+
+if [ -z "$remote_host" ] || [ -z "$remote_user" ] || [ -z "$remote_dir" ]; then
+    exit 0
+fi
+
+if ! scp "$filepath" "${remote_user}@${remote_host}:${remote_dir}/" 2>/dev/null; then
+    echo "warning: failed to save key to remote host ${remote_host}" 1>&2
+fi
